@@ -1,3 +1,4 @@
+import random
 from json import loads, dumps
 
 from kafka import KafkaConsumer, KafkaProducer
@@ -30,7 +31,11 @@ class Queue:
         self.__consumer.commit()
 
     def get_consumer(self):
-        return map(lambda x: x.value, self.__consumer)
+        res = {}
+        while len(res) == 0:
+            res = self.__consumer.poll(timeout_ms=100, max_records=100)
+        return map(lambda x: x.value, next(iter(res.values())))
+        # return map(lambda x: x.value, self.__consumer)
 
     def clear(self):
         print('Clear!')

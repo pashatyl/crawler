@@ -18,9 +18,9 @@ if __name__ == '__main__':
     # db.execute('delete from pages;')
     # db.commit()
     # queue.clear()
-    # queue.push('wiki/Main_Page')
+    # queue.push('/wiki/Main_Page')
     # queue.flush()
     crawler = Crawler(
-        queue, Processor(), Downloader(), Graph(db), Saver('/Users/pashatyl/docs/crawler'),
+        queue, Processor(), Downloader(), Graph(db), Saver('D:\\Crawler'),
         db, BASE_HOST)
     crawler.start()

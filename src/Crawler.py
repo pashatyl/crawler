@@ -58,11 +58,11 @@ class Crawler:
                         if old_url is not None:
                             self.__graph.add(old_url, [url])
 
-                    self.__db.add(set(unwatched_links))
+                    self.__db.add(unwatched_links)
                     self.__queue.ack()
                     self.__db.commit()
             except Exception as e:
-                log(ERROR, 'Exception: ', e)
+                log(ERROR, 'Exception: ', e, 'url: ' + url, 'unwatched_links: ' + str(unwatched_links))
                 self.__db.rollback()
                 time.sleep(30)
 

@@ -1,4 +1,5 @@
 import sqlite3
+from src.Helpers import chunks
 
 
 class Database:
@@ -15,21 +16,21 @@ class Database:
 
     def add(self, key: set):
         self.__contains_cache = self.__contains_cache.union(key)
-        self.execute_batch(f'INSERT INTO processed VALUES (?)', map(lambda x: (x,), key))
+        self.execute_batch(f'INSERT OR REPLACE INTO processed VALUES (?)', map(lambda x: (x,), key))
 
     def new_set(self, links: set):
         links -= self.__contains_cache
         rows = []
-        for ls in list(links)[::50]:
+        for ls in chunks(list(links), 50):
             question_marks = ', '.join('?' for _ in ls)
             self.__c.execute(f'''SELECT id 
                             FROM processed
                             WHERE id IN ({question_marks})''', list(ls))
-            rows += self.__c.fetchall()
+            rows += [x[0] for x in self.__c.fetchall()]
         return links - set(rows)
 
     def save_path(self, key, path):
-        self.execute(f'INSERT INTO pages VALUES (?, ?)', (key, path))
+        self.execute(f'INSERT OR REPLACE INTO pages VALUES (?, ?)', (key, path))
 
     def execute(self, query, *params):
         self.__c.execute(query, *params)

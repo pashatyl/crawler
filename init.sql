@@ -9,5 +9,5 @@ CREATE TABLE pages (
 );
 
 CREATE TABLE processed (
-    id VARCHAR PRIMARY KEY
+    id VARCHAR
 ) WITHOUT ROWID;
