@@ -3,8 +3,8 @@ from src.Helpers import chunks
 
 
 class Database:
-    def __init__(self):
-        self.__conn = sqlite3.connect('crawler.db')
+    def __init__(self, connection_string: str):
+        self.__conn = sqlite3.connect(connection_string)
         self.__c = self.__conn.cursor()
         self.__contains_cache = set()
 
@@ -35,6 +35,10 @@ class Database:
     def execute(self, query, *params):
         self.__c.execute(query, *params)
 
+    def get_multiple(self, query, *params):
+        self.execute(query, *params)
+        return self.__c
+
     def execute_batch(self, query: str, params):
         self.__c.executemany(query, params)
 
@@ -43,3 +47,7 @@ class Database:
 
     def rollback(self):
         self.__conn.rollback()
+
+    def size(self, table):
+        self.execute(f'SELECT COUNT(1) FROM {table}')
+        return self.__c.fetchone()[0]

@@ -12,7 +12,7 @@ from src.Saver import Saver
 if __name__ == '__main__':
     BASE_HOST = 'https://simple.wikipedia.org'
     queue = Queue('127.0.0.1:9092')
-    db = Database()
+    db = Database('crawler.db')
     # db.execute('delete from processed;')
     # db.execute('delete from edges;')
     # db.execute('delete from pages;')

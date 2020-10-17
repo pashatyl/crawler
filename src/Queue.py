@@ -35,7 +35,6 @@ class Queue:
         while len(res) == 0:
             res = self.__consumer.poll(timeout_ms=100, max_records=100)
         return map(lambda x: x.value, next(iter(res.values())))
-        # return map(lambda x: x.value, self.__consumer)
 
     def clear(self):
         print('Clear!')
