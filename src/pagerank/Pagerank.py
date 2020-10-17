@@ -18,8 +18,8 @@ def pagerank(A: list, L: list, alpha: float):
         for i in range(N):
             pr[i] = (1 - alpha) / N + \
                     alpha * np.sum(np.fromiter(
-                        (pr[j] / (len(L[j]) if len(L[j]) > 0 else 1) for j in A[i]),
-                        dtype=np.float64))
+                (pr[j] / len(L[j]) for j in A[i]),
+                dtype=np.float64)) if len(A[i]) > 0 else pr[i]
         eps = np.mean(pr - pr_prev, dtype=np.float64)
         print(eps)
         print(np.sum(pr))
