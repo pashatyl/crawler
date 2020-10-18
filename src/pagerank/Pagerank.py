@@ -9,17 +9,18 @@ def pagerank(A: list, L: list, alpha: float):
     # A - reversed incedency list (incoming only)
     # L - incedency list
     # alpha - jump coefficient
+
     N = len(A)
     pr = np.ones(N, np.float64) / N
 
     for _ in range(15):
         pr_prev = np.copy(pr)
-        pr /= np.sum(pr)
         for i in range(N):
             pr[i] = (1 - alpha) / N + \
-                    alpha * np.sum(np.fromiter(
+                    alpha * (np.sum(np.fromiter(
                 (pr[j] / len(L[j]) for j in A[i]),
-                dtype=np.float64)) if len(A[i]) > 0 else pr[i]
+                dtype=np.float64)) if len(A[i]) > 0 else pr[i])
+        pr /= np.sum(pr)
         eps = np.mean(pr - pr_prev, dtype=np.float64)
         print(eps)
         print(np.sum(pr))
@@ -48,12 +49,3 @@ def invert_graph(L, n):
             A[e].append(i)
     return A
 
-
-if __name__ == '__main__':
-    L, n, ids = fetch_graph("C:\\Personal\\crawler.db")
-    A = invert_graph(L, n)
-    rank = pagerank(A, L, 0.5)
-    pages_rank = []
-    for i, e in enumerate(rank):
-        pages_rank.append((ids[i], e))
-    print(sorted(pages_rank, key=lambda x: -x[1])[:10])
